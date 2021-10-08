@@ -1,0 +1,25 @@
+1. MeshRender bool 값 추가
+  - 동적 그림자를 생성할 오브젝트인지 확인
+
+2. Camera 분류작업 추가
+  - 동적 그림자 오브젝트들을 따로 분류해둠
+
+3. ShadowMap MRT 추가
+  - 그림자 정보를 광원 시점에서 찍은 타겟
+
+4. MRT 에서 뷰포트 설정단계 추가
+  - ShadowMap 의 해상도가 다르기 때문에, ViewPort 도 그때마다 변경해주어야 한다.
+
+5. ShadowMap 그리는 Shader 및 Material 추가
+
+6. CRenderMgr 에 ShadowMap 그리는 단계를 추가
+  - CLight 를 이용해서 렌더링
+  - CLight 에 Camera GameObject 모듈 추가
+  - 복사생성자 추가( 카메라 맴버 깊은복사 필요 )
+  - CCamera 가 모듈인지 아닌지 구별
+  - CCamera 에 render_shadowmap 추가(Animation 아직 미적용)
+  - CMeshRender 에 render_shadowmap 추가
+
+7. CTransform 에 LookAt 함수 추가
+  - func.h 에 수학관련 함수 추가
+  - CLight3D 에서 SetDir 함수 호출시 Transform 을 해당지점을 바라보게 LookAt 호출

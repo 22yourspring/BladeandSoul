@@ -1,0 +1,29 @@
+﻿// StudioYCS.idl: StudioYCS.exe의 형식 라이브러리 소스
+
+// 이 파일은 MIDL 컴파일러에 의해 처리되어
+// 형식 라이브러리(StudioYCS.tlb)입니다.
+
+[ uuid(98aefc9e-3d56-420d-960b-a232b5b23388), version(1.0) ]
+library StudioYCS
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	//  CStudioYCSDoc의 기본 디스패치 인터페이스
+
+	[ uuid(c762afd6-bdad-46f4-9c8d-586f5a65e180) ]
+	dispinterface IStudioYCS
+	{
+		properties:
+
+		methods:
+	};
+
+	//  CStudioYCSDoc에 대한 클래스 정보
+
+	[ uuid(538b13a9-27d3-42c7-a9d1-97fd272149d9) ]
+	coclass CStudioYCSDoc
+	{
+		[default] dispinterface IStudioYCS;
+	};
+};

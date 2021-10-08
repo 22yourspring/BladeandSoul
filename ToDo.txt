@@ -1,0 +1,13 @@
+1. Std3D Shader 수정
+ - 재질계수 적용
+ - Specular Texture 적용
+   - Specular Texture 가 있으면, 해당 텍스쳐를 사용,
+     없으면, 계수값 사용
+   - Specular 계수 저장용 Target 을 Deferred 단계에 추가
+
+ - Emissive Texture 적용
+
+2. 3D Animation Shadow
+ - StructuredBuffer 를 3DAnimator 마다 추가
+
+

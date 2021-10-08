@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="01. App">
+      <UniqueIdentifier>{af25296d-bb52-4f6e-9876-92b4d33a0c55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. MainFrame">
+      <UniqueIdentifier>{27dc0123-9312-4b31-9cc2-19fb863982a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default">
+      <UniqueIdentifier>{6f8cb07e-e817-4edf-8da4-e72c836ee470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. View">
+      <UniqueIdentifier>{2f5df34a-2dab-4a6b-b4aa-a1bee09e94f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. ToolScript">
+      <UniqueIdentifier>{f16b884c-3c21-4b77-a660-4ef0fc4a6e2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. View\02. Resource View">
+      <UniqueIdentifier>{4a0f6d90-f76b-460d-8cd8-5db516fe3e01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. View\01. Object View">
+      <UniqueIdentifier>{2078a6cc-4279-417b-8eb2-868d4adf791c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. View\03. Game View">
+      <UniqueIdentifier>{2a7d4aec-a363-4af5-9fc9-2191bacb28c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. View\04. Property View">
+      <UniqueIdentifier>{3bfa458e-bb4c-45ba-911d-50ed44362ad4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. View\05. Debug View">
+      <UniqueIdentifier>{f7ebc23f-6872-47e4-8173-163594936821}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. SplashScreen">
+      <UniqueIdentifier>{e244c35e-499b-4873-a03f-66b5396131e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. SplashScreen\MFC Gdiplus">
+      <UniqueIdentifier>{d6426aa1-2465-4177-93cc-2448b2def72f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. View\04. Property View\Property Option">
+      <UniqueIdentifier>{15561892-b432-440f-8a49-23cc47907cdd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ChildFrm.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StudioYCSDoc.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StudioYCSView.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewTree.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StudioYCS.h">
+      <Filter>01. App</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>02. MainFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="GridScript.h">
+      <Filter>04. ToolScript</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolCamScript.h">
+      <Filter>04. ToolScript</Filter>
+    </ClInclude>
+    <ClInclude Include="GameView.h">
+      <Filter>03. View\03. Game View</Filter>
+    </ClInclude>
+    <ClInclude Include="FileView.h">
+      <Filter>03. View\02. Resource View</Filter>
+    </ClInclude>
+    <ClInclude Include="StudioRes.h">
+      <Filter>03. View\02. Resource View</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassView.h">
+      <Filter>03. View\01. Object View</Filter>
+    </ClInclude>
+    <ClInclude Include="StudioView.h">
+      <Filter>03. View\01. Object View</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertiesWnd.h">
+      <Filter>03. View\04. Property View</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputWnd.h">
+      <Filter>03. View\05. Debug View</Filter>
+    </ClInclude>
+    <ClInclude Include="SplashScreen.h">
+      <Filter>05. SplashScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="gif_control.hpp">
+      <Filter>05. SplashScreen\MFC Gdiplus</Filter>
+    </ClInclude>
+    <ClInclude Include="PropGridSlider.h">
+      <Filter>03. View\04. Property View\Property Option</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ChildFrm.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StudioYCSDoc.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StudioYCSView.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewTree.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StudioYCS.cpp">
+      <Filter>01. App</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>02. MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="GridScript.cpp">
+      <Filter>04. ToolScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolCamScript.cpp">
+      <Filter>04. ToolScript</Filter>
+    </ClCompile>
+    <ClCompile Include="GameView.cpp">
+      <Filter>03. View\03. Game View</Filter>
+    </ClCompile>
+    <ClCompile Include="FileView.cpp">
+      <Filter>03. View\02. Resource View</Filter>
+    </ClCompile>
+    <ClCompile Include="StudioRes.cpp">
+      <Filter>03. View\02. Resource View</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassView.cpp">
+      <Filter>03. View\01. Object View</Filter>
+    </ClCompile>
+    <ClCompile Include="StudioView.cpp">
+      <Filter>03. View\01. Object View</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertiesWnd.cpp">
+      <Filter>03. View\04. Property View</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputWnd.cpp">
+      <Filter>03. View\05. Debug View</Filter>
+    </ClCompile>
+    <ClCompile Include="SplashScreen.cpp">
+      <Filter>05. SplashScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="gif_control.cpp">
+      <Filter>05. SplashScreen\MFC Gdiplus</Filter>
+    </ClCompile>
+    <ClCompile Include="PropGridSlider.cpp">
+      <Filter>03. View\04. Property View\Property Option</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="StudioYCS.idl">
+      <Filter>소스 파일</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StudioYCS.reg" />
+    <None Include="res\StudioYCS.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="StudioYCS.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\file_view.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\file_view_hc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\class_view.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\class_view_hc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\fileview.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\fileview_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\classview.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\classview_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\explorer.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\explorer_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\sort.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\sort_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menuimages.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menuimages_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\output_wnd.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\output_wnd_hc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\properties_wnd.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\properties_wnd_hc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\properties.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\properties_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\info.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\userimages.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\StudioYCSDoc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\StudioYCS.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Modif_splash_01.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\splash_01.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

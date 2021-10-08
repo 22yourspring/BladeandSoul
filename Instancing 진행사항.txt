@@ -1,0 +1,8 @@
+1. Std3DShader 에 Instancing 버전 VS 추가
+	- CShader 에 Instancing 용 VS 및 Blob 맴버 추가,
+ 	- CreateVSInst 함수 추가
+	- ResMgr 에서 VSInst 버전 Create
+
+2. 카메라에서 물체 분류방식 변경
+	- Entity 는 고유한 아이디를 가진다.
+

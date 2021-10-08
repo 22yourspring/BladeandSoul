@@ -1,0 +1,954 @@
+#pragma once
+
+#define SINGLE(type) private: type(); ~type();\
+public:\
+static type* GetInst()\
+{\
+	static type mgr;\
+	return &mgr;\
+}
+
+#define SAFE_RELEASE(p) if(nullptr != p) p->Release()
+#define SAFE_DELETE(p) if(nullptr != p) delete p; p = nullptr;
+
+#define	SAFE_DELETE_ARRAY(p)	if(p)	{ delete[] p; p = nullptr; }
+
+#define SAFE_DELETE_VECLIST(p) \
+{\
+auto	iter = p.begin();\
+auto	iterEnd = p.end();\
+for(; iter != iterEnd; ++iter)\
+{\
+	SAFE_DELETE((*iter));\
+}\
+p.clear();\
+}
+
+
+
+
+#define DEVICE CDevice::GetInst()->GetDevice()
+#define CONTEXT CDevice::GetInst()->GetContext()
+
+#define KEY(Key, State) (CKeyMgr::GetInst()->GetKeyState(Key) == State)
+#define KEY_HOLD(Key) KEY(Key, KEY_STATE::STATE_HOLD)
+#define KEY_TAB(Key) KEY(Key, KEY_STATE::STATE_TAB)
+#define KEY_AWAY(Key) KEY(Key, KEY_STATE::STATE_AWAY)
+#define KEY_NONE(Key) KEY(Key, KEY_STATE::STATE_NONE)
+
+#define CLONE(type) public: type* Clone() { return new type(*this); }
+#define CLONE_DISABLE(type) type* Clone() { assert(nullptr); return nullptr;} \
+                            type(const type& _class){assert(nullptr);}
+
+
+#define DT CTimeMgr::GetInst()->GetDeltaTime()
+
+#define DBG_WARNNING(pStr) CDebugMgr::GetInst()->AddDbgMsg(DBG_TYPE::DBG_WARNNING, pStr);
+#define DBG_ERROR(pStr) CDebugMgr::GetInst()->AddDbgMsg(DBG_TYPE::DBG_ERROR, pStr);
+#define DBG_MSG(pStr) CDebugMgr::GetInst()->AddDbgMsg(DBG_TYPE::DBG_MSG, pStr);
+
+
+#define MAX_LAYER 32
+
+#define _RADIAN 57.2957795130823f
+#define _DEGREE 0.01745329251994f
+
+#define _SHADOWSIZE_Y 512.f
+#define _SHADOWSIZE_X _SHADOWSIZE_Y * 1.71421356f
+
+#define COMPARED_INTEGER(_float) (int)((_float) * 100)
+
+#define ObjectX 4000.f
+//#define ObjectY -500.f
+#define ObjectY 3450.f
+#define ObjectZ 4000.f
+#define	CliffY  800.f
+
+#define INGAME_DISTANCE 0.05f
+
+typedef DirectX::SimpleMath::Vector2 Vec2;
+typedef DirectX::SimpleMath::Vector3 Vec3;
+typedef DirectX::SimpleMath::Vector4 Vec4;
+using DirectX::SimpleMath::Matrix;
+
+enum class PARTICLE_TYPE
+{
+	EXPLOSION,
+	FLUTTER,
+	FALL,
+	END,
+};
+
+enum class CAMERA_MOD
+{
+	CLIENT_MOD,
+	ENGINE_MOD,
+	END,
+};
+
+enum class DISTANCE
+{
+	NEARBY,		// 3M 내외
+	MIDDLE,		// 3 ~ 8M
+	AFAR,		// 9~ 16M
+	END,
+};
+
+enum class BLADEMASTER_FSM
+{
+	// 1
+	_1_STD_BLOCKING,		//막기
+	_1_STD_BLOCK1,
+	_1_STD_BLOCK2,
+	_1_STD_BLOCK3,
+
+	_1_STD_LEGSLASH,		// 기상기
+
+	// 2
+	_2_STD_RUSHING,	// 돌진
+	_2_STD_RUSHED,
+	
+	_2_HID_RUSHING,	// 습격
+	_2_HID_RUSHED,
+	
+	// 3
+//	_3_HID_FIVE_COMBO_SLASH_CAST,	// 오연베기		CAST는 폐기
+	_3_HID_FIVE_COMBO_SLASH_1,
+	_3_HID_FIVE_COMBO_SLASH_2,
+	_3_HID_FIVE_COMBO_SLASH_3,
+	_3_HID_FIVE_COMBO_SLASH_4,
+	_3_HID_FIVE_COMBO_SLASH_5,
+	
+	_3_STD_RETURN_READY,				// 누반 캐스팅
+	_3_STD_RETURN_STANDBY,			// 누반 대기중
+	_3_STD_RETURN_EXEC,				// 누반 실행
+	_3_STD_RETURN_FINISH,				// 누반 실패
+
+	_3_STD_LOWSLASH_CAST,		// 하단배기 시작
+	_3_STD_LOWSLASH_EXEC,		// 하단배기 실행
+
+	// 4
+	_4_STD_LYING_RETURN_READY,		// 누막 캐스팅
+	_4_STD_LYING_RETURN_STANDBY,		// 누막 대기중
+	_4_STD_LYING_RETURN_FINISH,		// 누막 종료
+
+	_4_STD_MACH_SLASH,				// 번개베기
+	_4_HID_MACH_SLASH,
+
+	// Z
+	_Z_STD_FLYING_SWALLOW_SWORD_EXEC,		// 비연검
+	_Z_STD_FLYING_SWALLOW_SWORD_FINISH,
+
+	_Z_STD_FLYING_SWALLOW_SWORD_END,
+	_Z_STD_FLYING_SWALLOW_SWORD_ENDTOIDLE,
+
+	_Z_HID_LAND_CUTTING,					// 대지가르기
+	_Z_HID_LAND_CUT_END,					
+
+	// X
+	_X_STD_KICKKNOCKBACK_CAST,			// 앞차기
+	_X_STD_KICKKNOCKBACK_EXEC,
+	_X_STD_KICKKNOCKBACK_END,
+
+	// SS
+	_S_BACKSTEP,			// 후방이동
+
+	// C
+	_C_STD_SHOULDERCHARGE,		// 어깨치기
+	
+	_C_HID_WINDYMOONSLASH_01,		// 풍월도
+	_C_HID_WINDYMOONSLASH_02,
+	_C_HID_WINDYMOONSLASH_FINISH,
+
+	// V
+	_V_STD_DIFFUSIONSOUL_1,			// 어검발산
+	_V_STD_DIFFUSIONSOUL_2,			// 어검발산
+
+	_V_HID_PIERCE1,				// 일섬
+	_V_HID_PIERCE2,				
+	_V_HID_PIERCE3,				
+
+	// Q
+	_Q_COUNTERATTACK_Q,		// 역공
+
+	// E
+	_E_COUNTERATTACK_E,		// 역습
+
+	// TAB
+	_T_FULL_MOON_SLASH,		// 만월베기
+
+	_T_ESCAPE,				// 탈기
+	_T_ESCAPE_END,			// 탈기 후 처리
+
+	// LBTN
+	_L_STD_HACK,						// 회전베기
+	_L_STD_HACK_END,					// 회베 후 처리
+
+	_L_STD_RUSHING_WIND_SPHERE,		// 기본 공격
+
+	_L_STD_BODY_BLADE_UNITY_FIRE,		// 신검합일	경공
+	_L_STD_BODY_BLADE_UNITY_EXEC,
+
+	_L_STD_BODY_BLADE_SPRINT_FIRE,	// 신검합일 비경공
+	_L_STD_BODY_BLADE_SPRINT_EXEC,
+
+	_L_STD_ASCENSION,					// 승천
+
+	_L_HID_BATTO,						// 발도
+
+	// RBTN
+	_R_STD_RUSH_STAB_EXEC,			// 찌르기
+
+	_R_STD_MIDAIR_EXEC_01,			// 천무
+	_R_STD_MIDAIR_EXEC_02,
+	_R_STD_MIDAIR_EXEC_03,
+	_R_STD_MIDAIR_EXEC_04,
+	_R_STD_MIDAIR_EXEC_05,
+	
+	_R_STD_CRIPPLING_CUT_FIRE,		// 추락
+	
+	_R_STD_LIGHTNINGSMASH_FIRE,		// 번개찍기
+	_R_STD_LIGHTNINGSMASH_EXEC,		
+	
+	_R_HID_VITALSLASH_EXEC,			// 급소베기
+
+	// F
+	_F_STD_PHANTOMSLASH3_SWING,		// 올려베기
+	_F_STD_PHANTOMSLASH3_EXEC,
+	
+	_F_BACKWARDROLL,				// 뒤구르기
+	
+	_F_HID_BATTO_BLOCKING_START,		// 격검
+	_F_HID_BATTO_BLOCKING,
+
+	//====== 어검 ======//
+	// Z
+	_Z_STD_SOULBLAST,					// 폭검령 (검술 자세)
+	_Z_HID_SOULBLAST,					// 폭검령 (발도 자세)
+
+	// X
+	_X_STD_GUARDSOUL_BLADE,			// 보호령
+	_X_HID_THIRDBLADE_SLASH,			// 어검 연속 베기
+
+	// C
+	_C_STD_SOULSTUNLIGHT,			// 뇌령 (검술 자세)
+	_C_HID_SOULSTUNLIGHT,			// 뇌령 (발도 자세)
+
+	// V
+	_V_STD_ROTATESOULBLADE,		// 회천령 (검술 자세)
+	_V_HID_ROTATESOULBLADE,		// 회천령 (발도 자세)
+
+
+	//====== IDLEING ======//
+	//NONBATTLE
+	_NON_MOV_IDLE,
+	//STD
+	_STD_MOV_IDLE,
+	//HID
+	_HID_SKL_IDLE,
+
+	// 비전투로 돌아오기
+	_NON_EQUIPX,
+
+	//======== 상태이상기========//
+	// 끌어당김
+	_CAPTURE_EXEC2_FIRE,	// 시작
+	_CAPTURE_EXEC2_END,	// 끝
+
+	// 넉백
+	_KNOCKBACK_LONG_B_START,
+	_DOWN_FRONT_END,		// 앞으로 넘어진 후 기상
+
+	// 기절
+	_STUN_START,
+	_STUN_LOOPING,
+
+	// 그로기
+	_GROGGY_F_START,
+	_GROGGY_LOOPING,
+	_GROGGY_END,
+
+	// 다운
+	_DOWN_MID_B_START,		// 앞차기, 비염각, 날아차기
+	_DOWN_LOW_B_R_START,	// 하단베기, 다리걸기
+	_DOWN_LOOPING,
+	_DOWN_END,				// 뒤로 넘어진 후 기상
+
+	// 공중
+	_MIDAIR1_UPPER,		// 올려차기, 강타
+	_UPPER_SLASH,
+	_MIDAIR2_UPPER,		// 공중차기
+	_MIDAIR1_LOWER,
+	_SKYKICK,
+	_ASCENSION_ED,
+
+	//==========FEEDBACK========//
+
+	// 마운트 계열
+	_FLYTAKEDOWN,		// 공제
+	_MOUNTX_BAT_IDLE,				// 제압 중
+	_MOUNTX_BAT_END,				// 제압 끝
+	_MOUNTX_SKL_ARMBAR,
+	_MOUNTX_SKL_POUNDING_FIRST,
+	_MOUNTX_SKL_POUNDING,
+
+	// 기본 피격
+	_DAMAGEBACK,		// 권무 피격
+	_DAMAGEFRONT,		// 기본 피격
+
+	// 기상기 맞을 때
+	_BE_DOWNCOUNTER,
+
+	// 점혈 맞을 때
+	_VIOLENCEPUNCH,
+
+	// 화염각
+	_TRIPLEKICK,
+
+	//========== 복귀모션 ==========// 
+	_BATTO_SKL_END,	//발도 스킬 후 발도로 복귀모션
+
+
+	//====== MOVING ======//
+	//NONBATTLE
+	_NON_MOV_IDLETOJUMP_FRONT,
+	_NON_MOV_IDLETOJUMP_LEFT,
+	_NON_MOV_IDLETOJUMP_RIGHT,
+	_NON_MOV_JUMPFRONT,
+	_NON_MOV_JUMPLEFT,
+	_NON_MOV_JUMPRIGHT,
+	_NON_MOV_JUMPTOIDLE,
+	_NON_MOV_JUMPTOMOVE_BACK,
+	_NON_MOV_JUMPTOMOVE_FRONT,
+	_NON_MOV_JUMPTOMOVE_LEFT,
+	_NON_MOV_JUMPTOMOVE_RIGHT,
+	_NON_MOV_LEFTTORIGHT,
+	_NON_MOV_MOVETOIDLE,
+	_NON_MOV_RIGHTTOLEFT,
+	_NON_MOV_RUNBACK,
+	_NON_MOV_RUNFRONT,
+	_NON_MOV_RUNLEFT,
+	_NON_MOV_RUNLEFTBACK,
+	_NON_MOV_RUNRIGHT,
+	_NON_MOV_RUNRIGHTBACK,
+
+	//STD
+	_STD_MOV_IDLETOJUMP_FRONT,
+	_STD_MOV_IDLETOJUMP_LEFT,
+	_STD_MOV_IDLETOJUMP_RIGHT,
+	_STD_MOV_JUMPFRONT,
+	_STD_MOV_JUMPLEFT,
+	_STD_MOV_JUMPRIGHT,
+	_STD_MOV_JUMPTOIDLE,
+	_STD_MOV_JUMPTOMOVE_BACK,
+	_STD_MOV_JUMPTOMOVE_FRONT,
+	_STD_MOV_JUMPTOMOVE_LEFT,
+	_STD_MOV_JUMPTOMOVE_RIGHT,
+	_STD_MOV_LEFTTORIGHT,
+	_STD_MOV_MOVETOIDLE,
+	_STD_MOV_RIGHTTOLEFT,
+	_STD_MOV_RUNBACK,
+	_STD_MOV_RUNFRONT,
+	_STD_MOV_RUNLEFT,
+	_STD_MOV_RUNLEFTBACK,
+	_STD_MOV_RUNRIGHT,
+	_STD_MOV_RUNRIGHTBACK,
+
+	//HID
+	_HID_MOV_IDLETOJUMP_FRONT,
+	_HID_MOV_IDLETOJUMP_LEFT,
+	_HID_MOV_IDLETOJUMP_RIGHT,
+	_HID_MOV_JUMPFRONT,
+	_HID_MOV_JUMPLEFT,
+	_HID_MOV_JUMPRIGHT,
+	_HID_MOV_JUMPTOIDLE,
+	_HID_MOV_JUMPTOMOVE_BACK,
+	_HID_MOV_JUMPTOMOVE_FRONT,
+	_HID_MOV_JUMPTOMOVE_LEFT,
+	_HID_MOV_JUMPTOMOVE_RIGHT,
+	_HID_MOV_LEFTTORIGHT,
+	_HID_MOV_MOVETOIDLE,
+	_HID_MOV_RIGHTTOLEFT,
+	_HID_MOV_RUNBACK,
+	_HID_MOV_RUNFRONT,
+	_HID_MOV_RUNLEFT,
+	_HID_MOV_RUNLEFTBACK,
+	_HID_MOV_RUNRIGHT,
+	_HID_MOV_RUNRIGHTBACK,
+
+
+	//========= 경공 ==========//
+	// 활강
+	_GLIDE_BOOST_FRONT,
+	_GLIDE_BOOST_FRONT_CANCLE,
+	_GLIDE_BOOST_FRONT_START,
+	_GLIDE_DIVE_FRONT,
+	_GLIDE_DIVE_FRONT_CANCLE,
+	_GLIDE_IDLETOJUMP_FRONT_01,
+	_GLIDE_JUMPFRONT,
+	_GLIDE_JUMPLEFT,
+	_GLIDE_JUMPRIGHT,
+
+	// 질주
+	_SPRINT_FRONT,
+	_SPRINT_FRONT_FALLSTART,
+	_SPRINT_FRONT_ROCKETSTART,
+	_SPRINT_IDLETOJUMP_FRONT_01,
+	_SPRINT_IDLETOJUMP_FRONT_02,
+	_SPRINT_IDLETOJUMP_FRONT_03,
+	_SPRINT_JUMPFRONT,
+	_SPRINT_JUMPTOIDLE,
+	_SPRINT_JUMPTOMOVE_FRONT,
+	_SPRINT_MOVETOIDLE,
+
+	END,
+};
+
+enum class KUNGFUMASTER_FSM
+{
+	//============ 1
+	// 반격
+	_1_COUNTERENEMY_READY,
+	_1_COUNTERENEMY_STANDBY,
+	_1_COUNTERENEMY_FINISH,
+	_1_COUNTERENEMY_EXEC,
+	// 기상기
+	_1_WINDMILL,
+	
+	//============ 2
+	// 용권
+	_2_FIRE_PUNCH1_END,
+	_2_FIRE_PUNCH1_SWING,
+	_2_FIRE_PUNCH2_END,
+	_2_FIRE_PUNCH2_SWING,
+	_2_FIRE_PUNCH3_END,
+	_2_FIRE_PUNCH3_SWING,
+	_2_FIRE_PUNCH4_END,
+	_2_FIRE_PUNCH4_SWING,
+
+	// 누워반격
+	_2_DOWNCOUNTER_READY,
+	_2_DOWNCOUNTER_STANDBY,
+	_2_DOWNCOUNTER_EXEC,
+	_2_DOWNCOUNTER_FINISH,
+
+	// 적룡권
+	_2_1000HAND_SWING1,
+	_2_1000HAND_EXEC1,
+	_2_1000HAND_FINISH1,
+
+	_2_1000HAND_SWING2,
+	_2_1000HAND_EXEC2,
+	_2_1000HAND_FINISH2,
+
+	_2_WIND_KICK1_SWING,
+	_2_WIND_KICK1_EXEC,
+	_2_WIND_KICK1_END,
+
+
+	// 묵사발
+	_2_POUNDING_FIRST,
+
+	//============ 3
+	// 한기파동
+	_3_DRAGON_FLY_EXEC,
+
+	// 다리걸기
+	_3_LOWKICK,
+
+	//============ 4
+	// 붕권
+	_4_HEAVYPUNCH_SWING,
+
+	// 돌려차기
+	_4_ICEBLAST_KICK,
+
+	// 팔꺾기
+	_4_ARMBAR,
+
+	//============ Z
+	// 승룡각
+	_Z_ASCENSION_KICK,
+	
+	//============ X
+	// 통배권
+	_X_BURSTABDOMEN,
+
+	// 점혈
+	_X_VIOLENCEPUNCH_CAST,
+	_X_VIOLENCEPUNCH_EXEC,
+
+	//============ C
+	// 권무
+	_C_MARTIALDANCE1_EXEC,
+	_C_MARTIALDANCE1_FIRE,
+	_C_MARTIALDANCE2_EXEC,
+	_C_MARTIALDANCE2_FIRE,
+	_C_MARTIALDANCE3_EXEC,
+	_C_MARTIALDANCE3_FIRE,
+	_C_MARTIALDANCE4_EXEC,
+	_C_MARTIALDANCE4_FIRE,
+
+	//============ V
+	// 산사태
+	_V_CRUSHGROUND_SWING,
+
+	//============ Q
+	// 횡이동
+	_Q_LEFT_SIDE_FIRE,
+	_Q_LEFT_SIDE_EXEC,
+	
+	//============ E
+	// 파고들기
+	_E_RIGHT_SIDE_FIRE,
+	_E_RIGHT_SIDE_EXEC,
+
+	//============ TAB
+	// 탈출
+	_T_ESCAPE,
+
+	// 뛰어찍기
+	_T_JUMPPUNCH_FIRE,
+	_T_JUMPPUNCH_EXEC,
+
+	// 흑염화
+	_T_WIND_MODE_SWING,
+	_T_WIND_MODE_EXEC,
+	_T_WIND_MODE_END,
+
+	// 공중제압
+	_T__FLYTAKEDOWN,
+
+	//============ LBTN
+	// 비염각
+	_L_DRAGONKICK_FIRE,
+	_L_DRAGONKICK_EXEC,
+	
+	//	날아차기
+	_L_FLYING_DRAGONKICK_FIRE,
+	_L_FLYING_DRAGONKICK_EXEC,
+
+	// 백열각
+	_L_4HITKICK,
+	
+	// 공중찍기
+	_L_SKYKICK,
+	
+	//============ RBTN
+	// 올려차기
+	_R_UPPERCUT,
+	
+	// 공중차기 (공콤)
+	_R_UPPERCUT2,
+	
+	// 진격권
+	_R_DASHUPPER_FIRE,
+	_R_DASHUPPER_EXEC,
+
+	// 전질보
+	_R_LEFTELBOW,
+
+	// 화염각
+	_R_TRIPLEKICK,
+
+	//============ F
+	// 강타
+	_F_ABDOMENATTACK_FIRE,
+	_F_ABDOMENATTACK_EXEC,
+
+	// 멸산고
+	_F_FINALATTACK,
+
+	// 뒤구르기
+	_F_BACKWARDROLL,
+
+	//============ SS
+	// 후방이동
+	_S_BACKSTEP,
+
+	// 제압 중
+	_MOUNT_BAT_IDLE,
+	// 제압 끝
+	_MOUNT_BAT_END,
+
+	//============= FEED BACK =============//
+
+	// 끌어오기
+	_FB_CAPTURE_EXEC2_FIRE,
+	_FB_CAPTURE_EXEC2_END,
+	
+	// 넉백
+	_FB_KNOCKBACK_LONG_B_START,
+	_FB_DOWN_FRONT_LOOPING,
+	_FB_DOWN_FRONT_END,
+	
+	// 기절
+	_STUN_START,
+	_STUN_LOOPING,
+	
+	// 그로기
+	_GROGGY_KNEE_F_START,
+	_GROGGY_KNEE_LOOPING,
+	_GROGGY_KNEE_END,
+	
+	// 다운
+	_DOWN_MID_B_START,		// 앞차기, 비염각, 날아차기
+	_DOWN_LOW_B_R_START,	// 하단베기, 다리걸기
+	_DOWN_LOOPING,
+	_DOWN_END,
+
+	// 공중
+	_AIR_MIDAIR1_UPPER,					// 올차, 뛰어찍기
+	_AIR_UPPER_SLASH,					// 올려베기
+	_AIR_MIDAIR2_UPPER,					// 비상, 천무, 공중차기
+	_AIR_MIDAIR1_LOWER,					// 아무것도 진행 안해서 떨어지기
+	_AIR_BIGHITX_SKL_SKYKICK,			// 공중 찍기
+	_AIR_STANDARDX_SKL_CRASH,			// 추락
+
+	_FB_ASCENSION,						// 승천
+
+	// 기본 피격
+	_DAMAGEBACK,		// 권무 피격
+	_DAMAGEFRONT,		// 기본 피격
+
+	// 대기											  
+	_NON_MOV_IDLE,	// 비전투
+	_BAT_MOV_IDLE,	// 전투	
+	
+
+	// 복귀 모션										
+	_BAT_EQUIPX,
+
+
+	// MOVING											
+	_COMBAT_JUMPTOIDLE,
+	_COMBAT_MOVETOIDLE, // 전투
+	_BAT_IDLETOJUMP_FRONT,
+	_NON_IDLETOJUMP_FRONT,
+	_IDLETOJUMP_LEFT,
+	_IDLETOJUMP_RIGHT,
+	_JUMPFRONT,
+	_JUMPLEFT,
+	_JUMPRIGHT,
+	_NONCOMBAT_JUMPTOIDLE,
+	_JUMPTOMOVE_BACK,
+	_JUMPTOMOVE_FRONT,
+	_JUMPTOMOVE_LEFT,
+	_JUMPTOMOVE_RIGHT,
+	_LEFTTORIGHT,
+	_NONCOMBAT_MOVETOIDLE,	// 비전투
+	_RIGHTTOLEFT,
+	_RUNBACK,
+	_RUNFRONT,
+	_RUNLEFT,
+	_RUNLEFTBACK,
+	_RUNRIGHT,
+	_RUNRIGHTBACK,
+
+	// 활강											  
+	_GLIDE_BOOST_FRONT,
+	_GLIDE_BOOST_FRONT_CANCLE,
+	_GLIDE_BOOST_FRONT_START,
+	_GLIDE_DIVE_FRONT,
+	_GLIDE_DIVE_FRONT_CANCLE,
+	_GLIDE_IDLETOJUMP_FRONT_01,
+	_GLIDE_JUMPFRONT,
+	_GLIDE_JUMPLEFT,
+	_GLIDE_JUMPRIGHT,
+
+	// 경공
+	_SPRINT_FRONT,
+	_SPRINT_FRONT_FALLSTART,
+	_SPRINT_FRONT_ROCKETSTART,
+	_SPRINT_IDLETOJUMP_FRONT_01,
+	_SPRINT_IDLETOJUMP_FRONT_02,
+	_SPRINT_IDLETOJUMP_FRONT_03,
+	_SPRINT_JUMPFRONT,
+	_SPRINT_JUMPTOIDLE,
+	_SPRINT_JUMPTOMOVE_FRONT,
+	_SPRINT_MOVETOIDLE,
+
+	END,
+};
+
+enum class RENDER_ADD
+{
+	NONE,
+	RENDER_ENGINE,
+	RENDER_CLIENT,
+	END,
+};
+
+enum class LANDSCAPE_MATERIAL
+{
+	DISABLE,
+	TILE1,
+	TILE2,
+	TILE3,
+	END,
+};
+
+enum class TERRAIN_OPTION
+{
+	DISABLE,
+	ENABLE,
+	END,
+};
+
+enum class BRUSH_TYPE
+{
+	DISABLE,
+	INK,
+	CIRCLE,
+	END,
+};
+
+enum class BRUSH_STATE
+{
+	DISABLE,
+	HEIGHT_MAP,
+	WEIGHT_MAP,
+	END,
+};
+
+enum class RES_TYPE
+{
+	MESHDATA,
+	MATERIAL,
+	MESH,
+	TEXTURE,
+	SOUND,
+	SHADER,
+	END,
+};
+
+namespace RES_TYPE_STR
+{
+	extern const wchar_t* MATERIAL;
+	extern const wchar_t* MESH;
+	extern const wchar_t* TEXTURE;
+	extern const wchar_t* SOUND;
+	extern const wchar_t* SHADER;
+}
+
+extern const wchar_t* RES_TYPE_NAME[(UINT)RES_TYPE::END];
+
+
+enum class SHADER_TYPE
+{
+	ST_VERTEX = 0x01,
+	ST_HULL = 0x02,
+	ST_DOMAIN = 0x04,
+	ST_GEOMETRY = 0x08,
+	ST_COMPUTE = 0x10,
+	ST_PIXEL = 0x20,
+	ST_END
+};
+
+#define ST_ALL (UINT)SHADER_TYPE::ST_VERTEX | (UINT)SHADER_TYPE::ST_HULL\
+ | (UINT)SHADER_TYPE::ST_DOMAIN | (UINT)SHADER_TYPE::ST_GEOMETRY | (UINT)SHADER_TYPE::ST_COMPUTE | (UINT)SHADER_TYPE::ST_PIXEL
+
+enum class COMPONENT_TYPE
+{
+	TRANSFORM,
+	MESHRENDER,
+	CAMERA,
+	COLLIDER2D,
+	COLLIDER3D,
+	ANIMATOR2D,
+	ANIMATOR3D,
+	LIGHT2D,
+	LIGHT3D,
+	TERRAIN,
+	PARTICLESYSTEM,
+	END,
+	SCRIPT,
+};
+
+enum class COLLIDER2D_TYPE
+{
+	RECT,
+	CIRCLE,
+};
+
+enum class COLLIDER3D_TYPE
+{
+	MESH,
+	CUBE,
+	SPHERE,
+};
+
+enum class SHADER_PARAM
+{
+	INT_0,
+	INT_1,
+	INT_2,
+	INT_3,
+	INT_END,
+
+	FLOAT_0,
+	FLOAT_1,
+	FLOAT_2,
+	FLOAT_3,
+	FLOAT_END,
+
+	VEC2_0,
+	VEC2_1,
+	VEC2_2,
+	VEC2_3,
+	VEC2_END,
+
+	VEC4_0,
+	VEC4_1,
+	VEC4_2,
+	VEC4_3,
+	VEC4_END,
+
+	MATRIX_0,
+	MATRIX_1,
+	MATRIX_2,
+	MATRIX_3,
+	MATRIX_END,
+
+	TEX_0,
+	TEX_1,
+	TEX_2,
+	TEX_3,
+	TEX_4,
+	TEX_5,
+	TEX_6,
+	TEX_7,
+	TEXARR_0,
+	TEXARR_1,
+	TEXARR_2,
+	TEXARR_3,
+	TEX_END,
+
+	RWTEX_0,
+	RWTEX_1,
+	RWTEX_2,
+	RWTEX_3,
+	RWTEX_END,
+};
+
+enum class RS_TYPE
+{
+	CULL_BACK,
+	CULL_FRONT,
+	CULL_NONE,
+	WIRE_FRAME,
+	END,
+};
+
+enum class BLEND_TYPE
+{
+	DEFAULT,
+	ALPHABLEND,
+	ONEBLEND,
+	END,
+};
+
+enum class DEPTH_STENCIL_STATE
+{
+	DEFAULT,	// LESS
+	LESS_EQUAL,
+	GRATER,
+	GRATER_EQUAL,
+	NO_TEST_NO_WIRTE,
+	NO_WRITE,
+	END,
+};
+
+enum class DBG_TYPE
+{
+	DBG_ERROR,
+	DBG_WARNNING,
+	DBG_MSG,
+};
+
+enum class EVENT_TYPE
+{
+	CREATE_OBJECT,	// wParam : GameObject, lParam : Layer Idx
+	DELETE_OBJECT,	// wParam : GameObject,
+	ADD_CHILD,		// wParam : Parent Object, lParam : Child Object
+	CLEAR_PARENT,	// wParam : Target Object
+	TRANSFER_LAYER,	// wParam : Target Object, lParam : (HIWORD)Layer Index (LOWORD)bMoveAll
+	TRANSFER_SCENE,
+	ACTIVATE_GAMEOBJECT,	// wParam : GameObject Adress
+	DEACTIVATE_GAMEOBJECT,	// wParam : GameObject Adress
+
+	ACTIVATE_COMPONENT,		// wParam : Component Adress
+	DEACTIVATE_COMPONENT,	// wParam : Component Adress
+
+	END,
+};
+
+enum class LIGHT_TYPE
+{
+	DIR,
+	POINT,
+	SPOT,
+	END,
+};
+
+enum class DIR_TYPE
+{
+	RIGHT,
+	UP,
+	FRONT,
+	END,
+};
+
+enum class FACE_TYPE
+{
+	FT_NEAR,
+	FT_FAR,
+	FT_UP,
+	FT_DOWN,
+	FT_LEFT,
+	FT_RIGHT,
+	FT_END,
+};
+
+enum class RT_TYPE
+{
+	SWAPCHAIN,
+
+	DIFFUSE,
+	NORMAL,
+	POSITION,
+	SPECULARMTRL,
+
+	LIGHT,
+	SPECULAR,
+
+	SHADOWMAP,
+
+	DEPTH_BUFFER,
+
+	POSTEFFECT,
+
+	END,
+};
+
+enum class MRT_TYPE
+{
+	// MRT			RT 조합
+	SWAPCHAIN,  // SWAPCHAIN
+	DEFERRED,	// DIFFUSE, NORMAL, POSITION, DEPTHBUFFER
+	LIGHT,		// LIGHT, SPECULAR
+	SHADOWMAP,	// SHADOWMAP
+	POSTEFFECT, // POSTEFFECT1, POSTEFFECT2
+	END,
+};
+
+enum class SHADER_POV
+{
+	NONE_RENDER,
+	LIGHTING,
+	DEFERRED,
+	FORWARD,
+	PARTICLE,
+	POSTEFFECT,
+	COMPUTE,
+};
