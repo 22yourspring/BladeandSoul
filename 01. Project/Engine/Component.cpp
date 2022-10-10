@@ -28,17 +28,14 @@ void CComponent::SetActive(bool _bTrue)
 			CEventMgr::GetInst()->AddEvent(event);
 		}
 	}
-	else
+	else if (_bTrue)
 	{
-		if (_bTrue)
-		{
-			// 활성화
-			// 비활성화
-			tEvent event = {};
-			event.eType = EVENT_TYPE::ACTIVATE_COMPONENT;
-			event.wParam = (DWORD_PTR)this;
+		// 활성화
+		// 비활성화
+		tEvent event = {};
+		event.eType = EVENT_TYPE::ACTIVATE_COMPONENT;
+		event.wParam = (DWORD_PTR)this;
 
-			CEventMgr::GetInst()->AddEvent(event);
-		}
+		CEventMgr::GetInst()->AddEvent(event);		
 	}
 }
